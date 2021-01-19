@@ -1,0 +1,27 @@
+﻿@page "/reg"
+@using grpcAuth
+@inject grpcAuth.GrpcA.GrpcAClient _kli
+@inject NavigationManager _nm
+
+<p><b>@_err</b></p>
+<p><input @bind-value="_name"/></p>
+<p><input @bind-value="_pass"/></p>
+<p><button @onclick="Reg">Registracija</button></p>
+
+@code 
+{
+	private string _name;
+	private string _pass;
+	private string _err = string.Empty;
+
+	private async void Reg()
+	{
+		_err = string.Empty;
+		var rez = await _kli.RegAsync(new RegistracijaMsg { Ime = _name, Pass = _pass });
+		if (rez.Uspeh)
+			_nm.NavigateTo("/");
+		else
+			_err = rez.Greska;
+		StateHasChanged();
+	}
+}
