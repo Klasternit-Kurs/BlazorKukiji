@@ -60,7 +60,7 @@ namespace BlazorKukiji.Server
 			}
 
 			app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
-
+			
 			app.UseHttpsRedirection();
 			app.UseBlazorFrameworkFiles();
 			app.UseStaticFiles();

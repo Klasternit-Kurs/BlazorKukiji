@@ -1,6 +1,6 @@
 ﻿@page "/reg"
 @using grpcAuth
-@inject grpcAuth.GrpcA.GrpcAClient _kli
+@inject Servisi.AuthProvajder _ap;
 @inject NavigationManager _nm
 
 <p><b>@_err</b></p>
@@ -17,7 +17,7 @@
 	private async void Reg()
 	{
 		_err = string.Empty;
-		var rez = await _kli.RegAsync(new RegistracijaMsg { Ime = _name, Pass = _pass });
+		var rez = await _ap.Registracija(new RegistracijaMsg { Ime = _name, Pass = _pass });
 		if (rez.Uspeh)
 			_nm.NavigateTo("/");
 		else

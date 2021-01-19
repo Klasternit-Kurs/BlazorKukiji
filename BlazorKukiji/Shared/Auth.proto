@@ -4,7 +4,10 @@ option csharp_namespace="grpcAuth";
 service GrpcA {
 	rpc Reg (RegistracijaMsg) returns (RezultatMsg);
 	rpc LogIn (RegistracijaMsg) returns (RezultatMsg);
+	rpc Provera (NullMsg) returns (KorisnikInfoMsg);
 }
+
+message NullMsg {}
 
 message RegistracijaMsg {
 	string Ime = 1;
@@ -14,4 +17,10 @@ message RegistracijaMsg {
 message RezultatMsg {
 	bool Uspeh = 1;
 	string Greska = 2;
+}
+
+message KorisnikInfoMsg {
+	bool Auth = 1;
+	string Ime = 2;
+	string KlejmoviXML = 3;
 }

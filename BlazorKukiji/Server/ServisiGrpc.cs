@@ -6,6 +6,8 @@ using Grpc.Core;
 using grpcAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace BlazorKukiji.Server
 {
@@ -40,7 +42,7 @@ namespace BlazorKukiji.Server
 				{
 					Uspeh = false,
 					Greska = rez.Errors.Select(e => e.Description)
-					.Aggregate((aku, err) => aku += err + Environment.NewLine)
+						.Aggregate((aku, err) => aku += err + Environment.NewLine)
 				};
 			}
 		}
@@ -56,6 +58,34 @@ namespace BlazorKukiji.Server
 				return new RezultatMsg { Uspeh = true, Greska = "" };
 			else
 				return new RezultatMsg { Uspeh = false, Greska = "Nesto nije ok :/" };
+		}
+
+		public override async Task<KorisnikInfoMsg> Provera(NullMsg request, ServerCallContext context)
+		{
+			_log.LogInformation("Proveravam korisnika");
+			if (_sign.Context.User.Identity.IsAuthenticated) //da li je ulogovan ili ne :)
+			{
+				_log.LogInformation("Nije ulogovan, zavrsavam");
+				return new KorisnikInfoMsg { Auth = false, Ime = string.Empty, KlejmoviXML = string.Empty };
+			}
+			else
+			{
+				_log.LogInformation("Ulogovan, lovim klejmove...");
+				var klejmovi = _sign.Context.User.Claims;
+				XmlSerializer xs = new XmlSerializer(klejmovi.GetType());
+				var mem = new MemoryStream();
+
+				xs.Serialize(mem, klejmovi);        //serijalizuje objekat u stream
+				var sr = new StreamReader(mem);     //stream reader nam olaksava citanje iz streama
+				string kred = sr.ReadToEnd();       //ucitavamo kompletan stream kao string
+				_log.LogInformation($"Klejmovi su: {kred}");
+				return new KorisnikInfoMsg
+				{
+					Auth = true,
+					Ime = _sign.Context.User.Identity.Name,
+					KlejmoviXML = kred
+				};
+			}
 		}
 	}
 }

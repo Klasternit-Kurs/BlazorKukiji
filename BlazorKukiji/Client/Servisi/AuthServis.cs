@@ -27,11 +27,9 @@ namespace BlazorKukiji.Client.Servisi
 
 		public async Task<RezultatMsg> Registracija(RegistracijaMsg r)
 			=> await _kli.RegAsync(r);
-		
 
-		public Task<Korisnik> ProveraKorisnika()
-		{
-			throw new NotImplementedException();
-		}
+
+		public async Task<Korisnik> ProveraKorisnika()
+			=> await _kli.ProveraAsync(new NullMsg());
 	}
 }
