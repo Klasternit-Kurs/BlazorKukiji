@@ -1,7 +1,30 @@
 ﻿@page "/"
+@using grpcAuth
+@inject AuthProvajder _auth
+@inject NavigationManager _nm
 
-<h1>Hello, world!</h1>
+<p><b>@_err</b></p>
+<p><input @bind-value="_name" /></p>
+<p><input @bind-value="_pass" /></p>
+<p><button @onclick="Log">Log in</button></p>
+<AuthorizeView>
+	<Authorized>
+		<b>Ulogovan</b>
+	</Authorized>
+	<NotAuthorized>
+		<b>Nije ulogovan</b>
+	</NotAuthorized>
+</AuthorizeView>
+@code
+{
+	private string _name;
+	private string _pass;
+	private string _err = string.Empty;
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+	private async void Log()
+	{
+		_err = string.Empty;
+		await _auth.Login(new RegistracijaMsg { Ime = _name, Pass = _pass });
+		StateHasChanged();
+	}
+}

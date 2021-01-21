@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace BlazorKukiji.Server
 {
@@ -35,11 +36,12 @@ namespace BlazorKukiji.Server
 				o.Cookie.Name = "TestAuthKolacic";
 				o.Cookie.HttpOnly = false;
 				o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
+				o.Cookie.IsEssential = true;
 
 			});
 
 			services.AddGrpc();
-
+			services.AddControllers().AddNewtonsoftJson();
 			services.AddControllersWithViews();
 			services.AddRazorPages();
 		}

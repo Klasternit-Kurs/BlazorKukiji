@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorKukiji.Client.Servisi
+namespace BlazorKukiji.Shared
 {
 	public class Korisnik
 	{

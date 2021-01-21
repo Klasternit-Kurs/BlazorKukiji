@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using BlazorKukiji.Shared;
+using grpcAuth;
+using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +36,18 @@ namespace BlazorKukiji.Client.Servisi
 
 		private async Task<Korisnik> DohvatiKorisnika()
 			=> _kor is not null && _kor.Ulogovan ? _kor : await _api.ProveraKorisnika();
+
+		public async Task<RezultatMsg> Registracija(RegistracijaMsg reg)
+		{
+			var rez = await _api.Registracija(reg);
+			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+			return rez;
+		}
+
+		public async Task Login(RegistracijaMsg reg)
+		{
+			await _api.Login(reg);
+			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 		}
 	}
 }

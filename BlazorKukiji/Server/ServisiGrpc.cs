@@ -47,11 +47,16 @@ namespace BlazorKukiji.Server
 
 		public override async Task<RezultatMsg> LogIn(RegistracijaMsg request, ServerCallContext context)
 		{
+			_log.LogInformation("Dobio zahtev za login");
 			var kor = await _man.FindByNameAsync(request.Ime);
 			if (kor is null)
+			{
+				_log.LogError("Korisnik ne postoji");
 				return new RezultatMsg { Uspeh = false, Greska = "Nesto nije ok :/" };
-
+			}
+			_log.LogInformation("Nasao korisnika");
 			var rez = await _sign.CheckPasswordSignInAsync(kor, request.Pass, false);
+			_log.LogInformation("Login uspesan");
 			if (rez.Succeeded)
 				return new RezultatMsg { Uspeh = true, Greska = "" };
 			else
