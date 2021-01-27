@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  blazorkukiji.server:
+    image: ${DOCKER_REGISTRY-}blazorkukijiserver
+    build:
+      context: .
+      dockerfile: BlazorKukiji/Server/Dockerfile

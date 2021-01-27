@@ -22,13 +22,12 @@ namespace BlazorKukiji.Client.Servisi
 		public async override Task<AuthenticationState> GetAuthenticationStateAsync()
 		{
 			var id = new ClaimsIdentity();
-			var korInfo = await DohvatiKorisnika();
+			_kor = await DohvatiKorisnika();
 
-			if (korInfo.Ulogovan)
+			if (_kor.Ulogovan)
 			{
 				var klejmovi = new[] { new Claim(ClaimTypes.Name, _kor.Ime) }
 					.Concat(_kor.Klejmovi.Select(k => new Claim(k.Key, k.Value)));
-
 				id = new ClaimsIdentity(klejmovi, "Server authentication");
 			}
 			return new AuthenticationState(new ClaimsPrincipal(id));
@@ -37,16 +36,22 @@ namespace BlazorKukiji.Client.Servisi
 		private async Task<Korisnik> DohvatiKorisnika()
 			=> _kor is not null && _kor.Ulogovan ? _kor : await _api.ProveraKorisnika();
 
-		public async Task<RezultatMsg> Registracija(RegistracijaMsg reg)
+		public async Task Registracija(RegistracijaMsg reg)
 		{
-			var rez = await _api.Registracija(reg);
+			await _api.Registracija(reg);
 			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-			return rez;
 		}
 
 		public async Task Login(RegistracijaMsg reg)
 		{
 			await _api.Login(reg);
+
+			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+		}
+
+		public async Task Logout()
+		{
+			await _api.LogOut();
 			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 		}
 	}

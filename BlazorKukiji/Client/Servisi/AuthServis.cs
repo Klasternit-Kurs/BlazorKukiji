@@ -26,13 +26,12 @@ namespace BlazorKukiji.Client.Servisi
 			rez.EnsureSuccessStatusCode();
 		}
 
-		public Task LogOut()
-		{
-			throw new NotImplementedException();
-		}
+		public async Task LogOut()
+			=> await _hc.GetAsync("api/userinfo/logout");
+		
 
-		public async Task<RezultatMsg> Registracija(RegistracijaMsg r)
-			=> await _kli.RegAsync(r);
+		public async Task Registracija(RegistracijaMsg r)
+			=> await _hc.PostAsJsonAsync("api/userinfo/registracija", r);
 
 
 		public async Task<Korisnik> ProveraKorisnika()

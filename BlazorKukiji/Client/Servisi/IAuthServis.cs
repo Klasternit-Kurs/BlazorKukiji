@@ -9,7 +9,7 @@ namespace BlazorKukiji.Client.Servisi
 {
 	public interface IAuthServis
 	{
-		Task<RezultatMsg> Registracija(RegistracijaMsg r);
+		Task Registracija(RegistracijaMsg r);
 		Task Login(RegistracijaMsg l);
 		Task LogOut();
 		Task<Korisnik> ProveraKorisnika();

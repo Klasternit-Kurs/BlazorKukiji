@@ -17,11 +17,8 @@
 	private async void Reg()
 	{
 		_err = string.Empty;
-		var rez = await _auth.Registracija(new RegistracijaMsg { Ime = _name, Pass = _pass });
-		if (rez.Uspeh)
-			_nm.NavigateTo("/");
-		else
-			_err = rez.Greska;
+		await _auth.Registracija(new RegistracijaMsg { Ime = _name, Pass = _pass });
+		_nm.NavigateTo("/");
 		StateHasChanged();
 	}
 }

@@ -10,9 +10,18 @@
 <AuthorizeView>
 	<Authorized>
 		<b>Ulogovan</b>
+		<button @onclick="Out">Log out</button>
 	</Authorized>
 	<NotAuthorized>
 		<b>Nije ulogovan</b>
+	</NotAuthorized>
+</AuthorizeView>
+<AuthorizeView Roles="Admin">
+	<Authorized>
+		<b>Jeste admin</b>
+	</Authorized>
+	<NotAuthorized>
+		<b>Nije admin</b>
 	</NotAuthorized>
 </AuthorizeView>
 @code
@@ -26,5 +35,10 @@
 		_err = string.Empty;
 		await _auth.Login(new RegistracijaMsg { Ime = _name, Pass = _pass });
 		StateHasChanged();
+	}
+	private async void Out()
+	{
+		await _auth.Logout();
+		_nm.NavigateTo("/", true);
 	}
 }

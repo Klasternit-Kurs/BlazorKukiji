@@ -15,5 +15,13 @@ namespace BlazorKukiji.Server
 		public DB(DbContextOptions<DB> o, IOptions<OperationalStoreOptions> o2)
 			: base(o, o2)
 		{ }
+
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+			base.OnModelCreating(builder);
+
+			builder.Entity<IdentityRole>().HasData(
+				new IdentityRole { Id = Guid.NewGuid().ToString(), ConcurrencyStamp = "zxcvsdc", Name = "Admin", NormalizedName = "ADMIN" });
+		}
 	}
 }
